@@ -45,6 +45,20 @@ function getAuthStatusText(status: MCP.AuthStatus): string {
 
 type McpEntry = NonNullable<Config.Info["mcp"]>[string]
 
+const codeReviewGraphPresetName = "code-review-graph"
+
+type McpAddArgs = {
+  preset?: string
+}
+
+function codeReviewGraphPresetConfig(): ConfigMCP.Info {
+  return {
+    type: "local",
+    command: ["uvx", "code-review-graph", "serve"],
+    timeout: 120000,
+  }
+}
+
 type McpConfigured = ConfigMCP.Info
 function isMcpConfigured(config: McpEntry): config is McpConfigured {
   return typeof config === "object" && config !== null && "type" in config
@@ -431,10 +445,16 @@ async function addMcpToConfig(name: string, mcpConfig: ConfigMCP.Info, configPat
   return configPath
 }
 
-export const McpAddCommand = effectCmd({
+export const McpAddCommand = effectCmd<McpAddArgs, void>({
   command: "add",
   describe: "add an MCP server",
-  handler: Effect.fn("Cli.mcp.add")(function* () {
+  builder: (yargs) =>
+    yargs.option("preset", {
+      type: "string",
+      choices: [codeReviewGraphPresetName] as const,
+      description: "Add a preset MCP server",
+    }),
+  handler: Effect.fn("Cli.mcp.add")(function* (args) {
     const maybeCtx = yield* InstanceRef
     if (!maybeCtx) return yield* Effect.die("InstanceRef not provided")
     const ctx = maybeCtx
@@ -470,6 +490,34 @@ export const McpAddCommand = effectCmd({
         })
         if (prompts.isCancel(scopeResult)) throw new UI.CancelledError()
         configPath = scopeResult
+      }
+
+      let preset = args.preset
+      if (!preset) {
+        const selected = await prompts.select({
+          message: "Preset",
+          options: [
+            {
+              label: "Manual",
+              value: "manual",
+              hint: "Configure a server manually",
+            },
+            {
+              label: codeReviewGraphPresetName,
+              value: codeReviewGraphPresetName,
+              hint: "Run the code-review-graph MCP server",
+            },
+          ],
+        })
+        if (prompts.isCancel(selected)) throw new UI.CancelledError()
+        if (selected !== "manual") preset = selected
+      }
+
+      if (preset === codeReviewGraphPresetName) {
+        await addMcpToConfig(codeReviewGraphPresetName, codeReviewGraphPresetConfig(), configPath)
+        prompts.log.success(`MCP server "${codeReviewGraphPresetName}" added to ${configPath}`)
+        prompts.outro("MCP server added successfully")
+        return
       }
 
       const name = await prompts.text({

@@ -420,6 +420,7 @@
         "chokidar": "4.0.3",
         "cli-sound": "1.1.3",
         "clipboardy": "4.0.0",
+        "code-review-graph": "github:tirth8205/code-review-graph#main",
         "cross-spawn": "catalog:",
         "decimal.js": "10.5.0",
         "diff": "catalog:",
@@ -2875,6 +2876,8 @@
     "cluster-key-slot": ["cluster-key-slot@1.1.2", "", {}, "sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA=="],
 
     "cmd-shim": ["cmd-shim@8.0.0", "", {}, "sha512-Jk/BK6NCapZ58BKUxlSI+ouKRbjH1NLZCgJkYoab+vEHUY3f6OzpNBN9u7HFSv9J6TRDGs4PLOHezoKGaFRSCA=="],
+
+    "code-review-graph": ["code-review-graph@github:tirth8205/code-review-graph#0919071", {}, "tirth8205-code-review-graph-0919071", "sha512-Ckq+m274StpXE/WgChPREsl5ebaaV8D3DWGdZsA4duBy0XRBIqhDXpaCpn/5HK67pKueDxUg74bf0fHIw3JUuw=="],
 
     "collapse-white-space": ["collapse-white-space@2.1.0", "", {}, "sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw=="],
 

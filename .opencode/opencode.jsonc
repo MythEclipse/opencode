@@ -6,7 +6,17 @@
       "packages/opencode/migration/*": "deny",
     },
   },
-  "mcp": {},
+  "mcp": {
+    "code-review-graph": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "code-review-graph",
+        "serve"
+      ],
+      "timeout": 120000
+    }
+  },
   "tools": {
     "github-triage": false,
     "github-pr-search": false,
